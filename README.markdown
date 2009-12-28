@@ -20,6 +20,8 @@ When adding this field to a section, the following options are available to you:
 * **Default Marker Location** is the address of a default marker. Enter any address/ZIP to be geocoded
 * **Default Zoom Level** is the initial zoom level of the map
 
+The field works in both Main Content and Sidebar columns, collapsing to a smaller viewport if required.
+
 ## Usage
 
 When creating a new entry, drag the red marker on the map to change location. To tweak the latitude/longitude click "Edit Location". This panel also allows you to enter an address to be geocoded and placed on the map.
