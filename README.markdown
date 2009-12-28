@@ -23,6 +23,8 @@ When adding this field to a section, the following options are available to you:
 
 When creating a new entry, drag the red marker on the map to change location. To tweak the latitude/longitude click "Edit Location". This panel also allows you to enter an address to be geocoded and placed on the map.
 
+![Example field](http://nick-dunn.co.uk/assets/files/symphony-maplocationfield.png)
+
 ## Data Source Filtering
 
 The field provides a single syntax for radius-based searches. Use the following as a DS filter:
