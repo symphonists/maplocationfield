@@ -41,3 +41,11 @@ Examples:
 	within 20 km of 10.545,-103.1
 	within 1km of 1 West Street, Burleigh Heads, Australia
 	within 500 miles of London
+
+To make the filters dynamic, use the parameter syntax like any other filter. For example using querystring parameters:
+
+	within {$url-distance} {$url-unit} of {$url-origin}
+
+Attached to a page invoked as:
+
+	/?distance=30&unit=km&origin=London,England
