@@ -19,35 +19,35 @@
 		}
 		
 		private function __geocodeAddress($address, $can_return_default=true) {
-			
+
 			$coordinates = null;
-			
+
 			$cache_id = md5('maplocationfield_' . $address);
 			$cache = new Cacheable($this->_engine->Database);
 			$cachedData = $cache->check($cache_id);	
-			
+
 			// no data has been cached
 			if(!$cachedData) {
-				
+
 				include_once(TOOLKIT . '/class.gateway.php'); 
-				
-	            $ch = new Gateway;
-	            $ch->init();
-	            $ch->setopt('URL', 'http://maps.google.com/maps/geo?q='.urlencode($address).'&output=json&key='.$this->_engine->Configuration->get('google-api-key', 'map-location-field'));
+
+				$ch = new Gateway;
+				$ch->init();
+				$ch->setopt('URL', 'http://maps.google.com/maps/geo?q='.urlencode($address).'&output=json&key='.$this->_engine->Configuration->get('google-api-key', 'map-location-field'));
 				$response = json_decode($ch->exec());
 
 				$coordinates = $response->Placemark[0]->Point->coordinates;
-				
+
 				if ($coordinates && is_array($coordinates)) {
 					$cache->write($cache_id, $coordinates[1] . ', ' . $coordinates[0], $this->_geocode_cache_expire); // cache lifetime in minutes
 				}
-				
+
 			}
 			// fill data from the cache
 			else {		
 				$coordinates = $cachedData['data'];
 			}
-			
+
 			// coordinates is an array, split and return
 			if ($coordinates && is_array($coordinates)) {
 				return $coordinates[1] . ', ' . $coordinates[0];
@@ -205,7 +205,7 @@
 			if ($zoom < 1) $zoom = 1;
 			
 			return sprintf(
-				"<img src='http://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=150x100&key=%s&sensor=false&markers=color:red|size:small|%s'/>",
+				"<img src='http://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=150x100&key=%s&sensor=false&markers=color:red|size:small|%s' alt=''/>",
 				$data['centre'],
 				$zoom,
 				$this->_engine->Configuration->get('google-api-key', 'map-location-field'),
