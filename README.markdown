@@ -1,15 +1,16 @@
 # Map Location Field
  
 Version: 3.0  
-Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team
+Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team  
 Build Date: 28 December 2009  
 Requirements: Symphony 2.0.6+
 
 ## Installation
  
-1. Upload the 'maplocationfield' folder in this archive to your Symphony 'extensions' folder.
-2. Enable it by selecting the "Field: Map Location", choose Enable from the with-selected menu, then click Apply.
-3. The field will be available in the list when creating a Section.
+1. Upload the 'maplocationfield' folder in this archive to your Symphony 'extensions' folder
+2. Enable it by selecting the "Field: Map Location", choose Enable from the with-selected menu, then click Apply
+3. Obtain a Google Maps API key and enter it on the System > Preferences page
+4. The field will be available in the list when creating a Section
 
 
 ## Configuration
