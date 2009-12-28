@@ -31,12 +31,10 @@ The field provides a single syntax for radius-based searches. Use the following 
 
 * `DISTANCE` is an integer
 * `UNIT` is the distance unit: `km`, `mile` or `miles`
-* `ORIGIN` is the centre of the radius. Accepts either a latitude/longitude or an address
+* `ORIGIN` is the centre of the radius. Accepts either a latitude/longitude pair or an address
 
 Examples:
 
-	within 20 km of 10.545, -103.1
-
+	within 20 km of 10.545,-103.1
 	within 1km of 1 West Street, Burleigh Heads, Australia
-
 	within 500 miles of London
