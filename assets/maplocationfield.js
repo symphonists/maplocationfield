@@ -218,7 +218,7 @@ MapLocationField.prototype.editAddress = function() {
 		address_field.val(),
 		function(result) {
 			self.setActiveTab('map');
-			self.map.fitBounds(result.geometry.bounds);				
+			if (result.geometry.bounds) self.map.fitBounds(result.geometry.bounds);
 			self.moveMarker(result.geometry.location, true);
 			address_field.val('');
 			button.val(button_value).removeAttr('disabled');
