@@ -10,7 +10,9 @@
 		// defaults used when user doesn't enter defaults when adding field to section
 		private $_default_location = 'London, England';
 		private $_default_coordinates = '51.58129468879224, -0.554702996875005'; // London, England
-		private $_default_zoom = 3;		
+		private $_default_zoom = 3;	
+		
+		private $_filter_origin = array();
 		
 		public function __construct(&$parent){
 			parent::__construct($parent);
@@ -90,15 +92,30 @@
 			
 			$status = self::__OK__;
 			
-			$coordinates = split(',', $data['coordinates']);
-			
-			$data = array(
-				'latitude' => trim($coordinates[0]),
-				'longitude' => trim($coordinates[1]),
-				'centre' => $data['centre'],
-				'zoom' => $data['zoom'],
-			);
-			
+			if (is_array($data)) {
+				
+				$coordinates = split(',', $data['coordinates']);
+
+				$data = array(
+					'latitude' => trim($coordinates[0]),
+					'longitude' => trim($coordinates[1]),
+					'centre' => $data['centre'],
+					'zoom' => $data['zoom'],
+				);				
+				
+			} else {
+				
+				$coordinates = split(',', $data);
+
+				$data = array(
+					'latitude' => trim($coordinates[0]),
+					'longitude' => trim($coordinates[1]),
+					'centre' => $data,
+					'zoom' => $this->get('default_zoom')
+				);
+				
+			}
+
 			return $data;
 		}
 		
@@ -181,19 +198,28 @@
 		}
 		
 		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
+						
+			$field = new XMLElement($this->get('element_name'), null, array(
+				'latitude' => $data['latitude'],
+				'longitude' => $data['longitude'],
+			));
 			
-			$element = new XMLElement($this->get('element_name'), null, array(
+			$map = new XMLElement('map', null, array(
 				'zoom' => $data['zoom'],
 				'centre' => $data['centre'],
 				'api-key' => $this->_engine->Configuration->get('google-api-key', 'map-location-field')
-			));
+			));			
+			$field->appendChild($map);
 			
-			$element->appendChild(new XMLElement('coordinates', null, array(
-				'latitude' => $data['latitude'],
-				'longitude' => $data['longitude'],
-			)));
+			if (count($this->_filter_origin['latitude']) > 0) {
+				$distance = new XMLElement('distance');
+				$distance->setAttribute('from', $this->_filter_origin['latitude'] . ',' . $this->_filter_origin['longitude']);
+				$distance->setAttribute('distance', $this->_driver->geoDistance($this->_filter_origin['latitude'], $this->_filter_origin['longitude'], $data['latitude'], $data['longitude'], $this->_filter_origin['unit']));
+				$distance->setAttribute('unit', ($this->_filter_origin['unit'] == 'k') ? 'km' : 'miles');
+				$field->appendChild($distance);
+			}
 
-			$wrapper->appendChild($element);
+			$wrapper->appendChild($field);
 		}
 		
 		public function prepareTableValue($data, XMLElement $link = null) {
@@ -256,8 +282,12 @@
 				// if we don't have a decent set of coordinates, we can't query
 				if (is_null($lat) || is_null($lng)) return true;
 				
+				$this->_filter_origin['latitude'] = $lat;
+				$this->_filter_origin['longitude'] = $lng;
+				$this->_filter_origin['unit'] = $unit[0];
+				
 				// build the bounds within the query should look
-				$radius = $this->_driver->geoRadius($lat, $lng, $radius, ($unit == 'km'));
+				$radius = $this->_driver->geoRadius($lat, $lng, $radius, ($unit[0] == 'k'));
 				
 				$where .= sprintf(
 					" AND `t%d`.`latitude` BETWEEN %s AND %s AND `t%d`.`longitude` BETWEEN %s AND %s",
@@ -272,7 +302,7 @@
 			return true;
 			
 		}
-		
+				
 	}
 
 ?>
