@@ -4,8 +4,8 @@
 	
 		public function about(){
 			return array('name' => 'Field: Map Location',
-						 'version' => '3.0',
-						 'release-date' => '2009-12-28',
+						 'version' => '3.1',
+						 'release-date' => '2010-01-04',
 						 'author' => array('name' => 'Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team',
 										   'website' => 'http://www.symphony-cms.com',
 										   'email' => 'team@symphony21.com')

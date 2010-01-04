@@ -1,8 +1,8 @@
 # Map Location Field
  
-Version: 3.0  
+Version: 3.1  
 Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team  
-Build Date: 28 December 2009  
+Build Date: 2010-01-04  
 Requirements: Symphony 2.0.6+
 
 ## Installation
@@ -51,3 +51,21 @@ To make the filters dynamic, use the parameter syntax like any other filter. For
 Attached to a page invoked as:
 
 	/?distance=30&unit=km&origin=London,England
+
+## Data Source XML result
+The XML output of the field looks like this:
+
+	<location latitude="51.6614" longitude="-0.40042">
+		<map zoom="15" centre="51.6614,-0.40042" api-key="ABQIAAAAykIy7WvrTm2Tm5kmvjjzTxRoCfPhCQvAAiAYr43h_8k-bhF9mRRtsMnSSK0m7QEgiooLPnISu5G2-g" />
+	</location>
+
+The first two attributes are the latitude/longitude of the marker on the map. The `<map>` element contains any information you need to rebuild the Google Map on the frontend of your website: its zoom level, centre-point and your API key.
+
+If you are filtering using the Map Location Field using a "within" filter then you will see an additional `<distance>` element:
+	
+	<location latitude="51.6614" longitude="-0.40042">
+		<map zoom="15" centre="51.6614,-0.40042" api-key="ABQIAAAAykIy7WvrTm2Tm5kmvjjzTxRoCfPhCQvAAiAYr43h_8k-bhF9mRRtsMnSSK0m7QEgiooLPnISu5G2-g" />
+		<distance from="51.6245572,-0.4674079" distance="3.8" unit="miles" />
+	</location>
+
+The `from` attribute is the latitude/longitude resolved from the DS filter (the origin), the `unit` shows either "km" or "miles" depending on what you use in your filter, and `distance` is the distance between your map marker and the origin.
