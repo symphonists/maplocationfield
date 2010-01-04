@@ -58,7 +58,7 @@
 			Modified from:
 			http://www.kevinbradwick.co.uk/developer/php/free-to-script-to-calculate-the-radius-of-a-coordinate-using-latitude-and-longitude
 		*/
-		public function geoRadius($lat, $lng, $rad, $kilometeres=false) {
+		public function geoRadius($lat, $lng, $rad, $kilometers=false) {
 			$radius = ($kilometers) ? ($rad * 0.621371192) : $rad;
 			
 			(float)$dpmLAT = 1 / 69.1703234283616; 
