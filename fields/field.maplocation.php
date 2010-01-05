@@ -146,9 +146,11 @@
 
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL){
 
-			$this->_engine->Page->addScriptToHead('http://maps.google.com/maps/api/js?sensor=false', 79);
-			$this->_engine->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.css', 'screen', 78);
-			$this->_engine->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.js', 80);
+			if ($this->_engine->Page) {
+				$this->_engine->Page->addScriptToHead('http://maps.google.com/maps/api/js?sensor=false', 79);
+				$this->_engine->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.css', 'screen', 78);
+				$this->_engine->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.js', 80);
+			}
 			
 			// input values
 			$coordinates = array($data['latitude'], $data['longitude']);
