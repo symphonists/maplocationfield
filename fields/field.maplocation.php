@@ -105,6 +105,11 @@
 				
 			} else {
 				
+				// Check that the $centre is actually a coordinate
+				if (!preg_match('/^(-?[.0-9]+),\s?(-?[.0-9]+)$/', $data)) {
+					$data = self::__geocodeAddress($data);
+				}
+				
 				$coordinates = split(',', $data);
 
 				$data = array(
