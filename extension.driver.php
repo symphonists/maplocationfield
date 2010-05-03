@@ -24,6 +24,11 @@
 							'page' => '/system/preferences/',
 							'delegate' => 'AddCustomPreferenceFieldsets',
 							'callback' => 'appendPreferences'
+						),
+						array(
+							'page'		=> '/frontend/',
+							'delegate'	=> 'FrontendParamsResolve',
+							'callback'	=> 'frontendParamsResolve'
 						)
 					);
 		}		
@@ -40,6 +45,10 @@
 			$group->appendChild(new XMLElement('p', 'Get a Google Maps API key from the <a href="http://code.google.com/apis/maps/index.html">Google Maps site</a>.', array('class' => 'help')));
 			
 			$context['wrapper']->appendChild($group);						
+		}
+		
+		public function frontendParamsResolve($context) {
+			$context['params']['google-api-key'] = $context['parent']->Configuration->get('google-api-key', 'map-location-field');
 		}
 
 		public function install() {

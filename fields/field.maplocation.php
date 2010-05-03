@@ -208,8 +208,7 @@
 			
 			$map = new XMLElement('map', null, array(
 				'zoom' => $data['zoom'],
-				'centre' => $data['centre'],
-				'api-key' => $this->_engine->Configuration->get('google-api-key', 'map-location-field')
+				'centre' => $data['centre']
 			));			
 			$field->appendChild($map);
 			
