@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {	
-	jQuery('.field-maplocation').each(function() {
+	jQuery('fieldset .field-maplocation').each(function() {
 		var field = new MapLocationField(jQuery(this));
 	});
 });

@@ -1,9 +1,9 @@
 # Map Location Field
  
-Version: 3.1  
-Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team  
-Build Date: 2010-01-04  
-Requirements: Symphony 2.0.6+
+* Version: 3.1.1
+* Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team
+* Build Date: 2011-02-07
+* Requirements: Symphony 2.2
 
 ## Installation
  

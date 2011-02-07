@@ -153,8 +153,8 @@
 
 			if ($this->_engine->Page) {
 				$this->_engine->Page->addScriptToHead('http://maps.google.com/maps/api/js?sensor=false', 79);
-				$this->_engine->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.css', 'screen', 78);
-				$this->_engine->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.js', 80);
+				$this->_engine->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
+				$this->_engine->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.js', 80);
 			}
 			
 			// input values
@@ -237,7 +237,7 @@
 			if ($zoom < 1) $zoom = 1;
 			
 			return sprintf(
-				"<img src='http://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=150x100&key=%s&sensor=false&markers=color:red|size:small|%s' alt=''/>",
+				"<img src='http://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=160x90&key=%s&sensor=false&markers=color:red|size:small|%s' alt=''/>",
 				$data['centre'],
 				$zoom,
 				$this->_engine->Configuration->get('google-api-key', 'map-location-field'),

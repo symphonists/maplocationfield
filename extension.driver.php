@@ -13,9 +13,9 @@
 		}
 		
 		public function uninstall(){
-			$this->_Parent->Database->query("DROP TABLE `tbl_fields_maplocation`");
-			$this->_Parent->Configuration->remove('google-api-key', 'map-location-field');			
-			$this->_Parent->saveConfig();
+			Symphony::Database()->query("DROP TABLE `tbl_fields_maplocation`");
+			Symphony::Configuration()->remove('google-api-key', 'map-location-field');			
+			Administration::instance()->saveConfig();
 		}
 		
 		public function getSubscribedDelegates(){
@@ -39,7 +39,7 @@
 			$group->appendChild(new XMLElement('legend', 'Map Location Field'));
 
 			$label = Widget::Label('Google Maps API Key');
-			$label->appendChild(Widget::Input('settings[map-location-field][google-api-key]', General::Sanitize($context['parent']->Configuration->get('google-api-key', 'map-location-field'))));		
+			$label->appendChild(Widget::Input('settings[map-location-field][google-api-key]', General::Sanitize(Symphony::Configuration()->get('google-api-key', 'map-location-field'))));		
 			$group->appendChild($label);
 			
 			$group->appendChild(new XMLElement('p', 'Get a Google Maps API key from the <a href="http://code.google.com/apis/maps/index.html">Google Maps site</a>.', array('class' => 'help')));
@@ -48,11 +48,11 @@
 		}
 		
 		public function frontendParamsResolve($context) {
-			$context['params']['google-api-key'] = $context['parent']->Configuration->get('google-api-key', 'map-location-field');
+			$context['params']['google-api-key'] = Symphony::Configuration()->get('google-api-key', 'map-location-field');
 		}
 
 		public function install() {
-			return $this->_Parent->Database->query("CREATE TABLE `tbl_fields_maplocation` (
+			return Symphony::Database()->query("CREATE TABLE `tbl_fields_maplocation` (
 			  `id` int(11) unsigned NOT NULL auto_increment,
 			  `field_id` int(11) unsigned NOT NULL,
 			  `default_location` varchar(60) NOT NULL,
