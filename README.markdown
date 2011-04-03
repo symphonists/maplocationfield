@@ -1,16 +1,15 @@
 # Map Location Field
- 
-* Version: 3.1.1
+
+* Version: 3.2
 * Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team
 * Build Date: 2011-02-07
 * Requirements: Symphony 2.2
 
 ## Installation
- 
+
 1. Upload the 'maplocationfield' folder in this archive to your Symphony 'extensions' folder
 2. Enable it by selecting the "Field: Map Location", choose Enable from the with-selected menu, then click Apply
-3. Obtain a Google Maps API key and enter it on the System > Preferences page
-4. The field will be available in the list when creating a Section
+3. The field will be available in the list when creating a Section
 
 
 ## Configuration
@@ -56,15 +55,15 @@ Attached to a page invoked as:
 The XML output of the field looks like this:
 
 	<location latitude="51.6614" longitude="-0.40042">
-		<map zoom="15" centre="51.6614,-0.40042" api-key="ABQIAAAAykIy7WvrTm2Tm5kmvjjzTxRoCfPhCQvAAiAYr43h_8k-bhF9mRRtsMnSSK0m7QEgiooLPnISu5G2-g" />
+		<map zoom="15" centre="51.6614,-0.40042" />
 	</location>
 
 The first two attributes are the latitude/longitude of the marker on the map. The `<map>` element contains any information you need to rebuild the Google Map on the frontend of your website: its zoom level, centre-point and your API key.
 
 If you are filtering using the Map Location Field using a "within" filter then you will see an additional `<distance>` element:
-	
+
 	<location latitude="51.6614" longitude="-0.40042">
-		<map zoom="15" centre="51.6614,-0.40042" api-key="ABQIAAAAykIy7WvrTm2Tm5kmvjjzTxRoCfPhCQvAAiAYr43h_8k-bhF9mRRtsMnSSK0m7QEgiooLPnISu5G2-g" />
+		<map zoom="15" centre="51.6614,-0.40042" />
 		<distance from="51.6245572,-0.4674079" distance="3.8" unit="miles" />
 	</location>
 
