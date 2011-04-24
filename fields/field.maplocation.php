@@ -35,13 +35,13 @@
 
 				$ch = new Gateway;
 				$ch->init();
-				$ch->setopt('URL', 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address));
+				$ch->setopt('URL', 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false');
 				$response = json_decode($ch->exec());
 
 				$coordinates = $response->results[0]->geometry->location;
 
-				if ($coordinates && is_array($coordinates)) {
-					$cache->write($cache_id, $coordinates[1] . ', ' . $coordinates[0], $this->_geocode_cache_expire); // cache lifetime in minutes
+				if ($coordinates && is_object($coordinates)) {
+					$cache->write($cache_id, $coordinates->lat . ', ' . $coordinates->lng, $this->_geocode_cache_expire); // cache lifetime in minutes
 				}
 
 			}
@@ -51,8 +51,8 @@
 			}
 
 			// coordinates is an array, split and return
-			if ($coordinates && is_array($coordinates)) {
-				return $coordinates[1] . ', ' . $coordinates[0];
+			if ($coordinates && is_object($coordinates)) {
+				return $coordinates->lng . ', ' . $coordinates->lat;
 			}
 			// return comma delimeted string
 			elseif ($coordinates) {
