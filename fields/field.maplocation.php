@@ -4,7 +4,6 @@
 
 	Class fieldMapLocation extends Field{
 
-		private $_driver;
 		private $_geocode_cache_expire = 60; // minutes
 
 		// defaults used when user doesn't enter defaults when adding field to section
@@ -17,11 +16,46 @@
 		public function __construct(&$parent){
 			parent::__construct($parent);
 			$this->_name = 'Map Location';
-			$this->_driver = $this->_engine->ExtensionManager->create('maplocationfield');
 		}
 
-		private function __geocodeAddress($address, $can_return_default=true) {
+	/*-------------------------------------------------------------------------
+		Definition:
+	-------------------------------------------------------------------------*/
 
+		public function mustBeUnique(){
+			return true;
+		}
+
+		public function canFilter(){
+			return true;
+		}
+
+	/*-------------------------------------------------------------------------
+		Setup:
+	-------------------------------------------------------------------------*/
+
+		public function createTable(){
+			return Symphony::Database()->query(
+				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
+				  `id` int(11) unsigned NOT NULL auto_increment,
+				  `entry_id` int(11) unsigned NOT NULL,
+				  `latitude` double default NULL,
+				  `longitude` double default NULL,
+				  `centre` varchar(255) default NULL,
+				  `zoom` int(11) default NULL,
+				  PRIMARY KEY  (`id`),
+				  KEY `entry_id` (`entry_id`),
+				  KEY `latitude` (`latitude`),
+				  KEY `longitude` (`longitude`)
+				) TYPE=MyISAM;"
+			);
+		}
+
+	/*-------------------------------------------------------------------------
+		Utilities:
+	-------------------------------------------------------------------------*/
+
+		private function __geocodeAddress($address, $can_return_default=true) {
 			$coordinates = null;
 
 			$cache_id = md5('maplocationfield_' . $address);
@@ -64,16 +98,11 @@
 			}
 		}
 
-		public function mustBeUnique(){
-			return true;
-		}
+	/*-------------------------------------------------------------------------
+		Settings:
+	-------------------------------------------------------------------------*/
 
-		public function canFilter(){
-			return true;
-		}
-
-		function displaySettingsPanel(&$wrapper, $errors=NULL){
-
+		public function displaySettingsPanel(&$wrapper, $errors=NULL){
 			parent::displaySettingsPanel($wrapper, $errors);
 
 			$label = Widget::Label('Default Marker Location');
@@ -85,47 +114,9 @@
 			$wrapper->appendChild($label);
 
 			$this->appendShowColumnCheckbox($wrapper);
-
 		}
 
-		public function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
-
-			$status = self::__OK__;
-
-			if (is_array($data)) {
-
-				$coordinates = split(',', $data['coordinates']);
-
-				$data = array(
-					'latitude' => trim($coordinates[0]),
-					'longitude' => trim($coordinates[1]),
-					'centre' => $data['centre'],
-					'zoom' => $data['zoom'],
-				);
-
-			} else {
-
-				// Check that the $centre is actually a coordinate
-				if (!preg_match('/^(-?[.0-9]+),\s?(-?[.0-9]+)$/', $data)) {
-					$data = self::__geocodeAddress($data);
-				}
-
-				$coordinates = split(',', $data);
-
-				$data = array(
-					'latitude' => trim($coordinates[0]),
-					'longitude' => trim($coordinates[1]),
-					'centre' => $data,
-					'zoom' => $this->get('default_zoom')
-				);
-
-			}
-
-			return $data;
-		}
-
-		function commit(){
-
+		public function commit(){
 			if(!parent::commit()) return false;
 
 			$id = $this->get('id');
@@ -143,18 +134,20 @@
 
 			if(!$fields['default_zoom']) $fields['default_zoom'] = $this->_default_zoom;
 
-			$this->_engine->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
+			Symphony::Database()->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
 
-			$this->_engine->Database->insert($fields, 'tbl_fields_' . $this->handle());
-
+			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
 		}
 
-		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL){
+	/*-------------------------------------------------------------------------
+		Publish:
+	-------------------------------------------------------------------------*/
 
-			if ($this->_engine->Page) {
-				$this->_engine->Page->addScriptToHead('http://maps.google.com/maps/api/js?sensor=false', 79);
-				$this->_engine->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
-				$this->_engine->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.js', 80);
+		public function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL, $entry_id=NULL){
+			if (class_exists('Administration') && Administration::instance()->Page) {
+				Administration::instance()->Page->addScriptToHead('http://maps.google.com/maps/api/js?sensor=false', 79);
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.js', 80);
 			}
 
 			// input values
@@ -183,29 +176,43 @@
 			$wrapper->appendChild($label);
 		}
 
-		public function createTable(){
+		public function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
+			$status = self::__OK__;
 
-			return $this->Database->query(
+			if (is_array($data)) {
+				$coordinates = split(',', $data['coordinates']);
 
-				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-				  `id` int(11) unsigned NOT NULL auto_increment,
-				  `entry_id` int(11) unsigned NOT NULL,
-				  `latitude` double default NULL,
-				  `longitude` double default NULL,
-				  `centre` varchar(255) default NULL,
-				  `zoom` int(11) default NULL,
-				  PRIMARY KEY  (`id`),
-				  KEY `entry_id` (`entry_id`),
-				  KEY `latitude` (`latitude`),
-				  KEY `longitude` (`longitude`)
-				) TYPE=MyISAM;"
+				$data = array(
+					'latitude' => trim($coordinates[0]),
+					'longitude' => trim($coordinates[1]),
+					'centre' => $data['centre'],
+					'zoom' => $data['zoom'],
+				);
+			}
+			else {
+				// Check that the $centre is actually a coordinate
+				if (!preg_match('/^(-?[.0-9]+),\s?(-?[.0-9]+)$/', $data)) {
+					$data = self::__geocodeAddress($data);
+				}
 
-			);
+				$coordinates = split(',', $data);
 
+				$data = array(
+					'latitude' => trim($coordinates[0]),
+					'longitude' => trim($coordinates[1]),
+					'centre' => $data,
+					'zoom' => $this->get('default_zoom')
+				);
+			}
+
+			return $data;
 		}
 
-		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
+	/*-------------------------------------------------------------------------
+		Output:
+	-------------------------------------------------------------------------*/
 
+		public function appendFormattedElement(&$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
 			$field = new XMLElement($this->get('element_name'), null, array(
 				'latitude' => $data['latitude'],
 				'longitude' => $data['longitude'],
@@ -220,7 +227,7 @@
 			if (count($this->_filter_origin['latitude']) > 0) {
 				$distance = new XMLElement('distance');
 				$distance->setAttribute('from', $this->_filter_origin['latitude'] . ',' . $this->_filter_origin['longitude']);
-				$distance->setAttribute('distance', $this->_driver->geoDistance($this->_filter_origin['latitude'], $this->_filter_origin['longitude'], $data['latitude'], $data['longitude'], $this->_filter_origin['unit']));
+				$distance->setAttribute('distance', extension_maplocationfield::geoDistance($this->_filter_origin['latitude'], $this->_filter_origin['longitude'], $data['latitude'], $data['longitude'], $this->_filter_origin['unit']));
 				$distance->setAttribute('unit', ($this->_filter_origin['unit'] == 'k') ? 'km' : 'miles');
 				$field->appendChild($distance);
 			}
@@ -228,10 +235,8 @@
 			$wrapper->appendChild($field);
 		}
 
-		public function prepareTableValue($data, XMLElement $link = null) {
+		public function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
 			if (empty($data)) return;
-
-			// return $data['latitude'] . ', ' . $data['longitude'];
 
 			$zoom = (int)$data['zoom'] - 2;
 			if ($zoom < 1) $zoom = 1;
@@ -242,11 +247,13 @@
 				$zoom,
 				implode(',', array($data['latitude'], $data['longitude']))
 			);
-
 		}
 
-		function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation=false){
+	/*-------------------------------------------------------------------------
+		Filtering:
+	-------------------------------------------------------------------------*/
 
+		public function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation=false){
 			// Symphony by default splits filters by commas. We want commas, so
 			// concatenate filters back together again putting commas back in
 			$data = join(',', $data);
@@ -292,7 +299,7 @@
 				$this->_filter_origin['unit'] = $unit[0];
 
 				// build the bounds within the query should look
-				$radius = $this->_driver->geoRadius($lat, $lng, $radius, ($unit[0] == 'k'));
+				$radius = extension_maplocationfield::geoRadius($lat, $lng, $radius, ($unit[0] == 'k'));
 
 				$where .= sprintf(
 					" AND `t%d`.`latitude` BETWEEN %s AND %s AND `t%d`.`longitude` BETWEEN %s AND %s",
@@ -305,9 +312,6 @@
 			}
 
 			return true;
-
 		}
 
 	}
-
-?>
