@@ -4,8 +4,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Map Location',
-				'version'		=> '3.2.1',
-				'release-date'	=> '2011-05-31',
+				'version'		=> '3.2.2',
+				'release-date'	=> '2011-08-16',
 				'author'		=> array(
 					array(
 						'name'		=> 'Nick Dunn',

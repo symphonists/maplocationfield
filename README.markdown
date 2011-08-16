@@ -1,8 +1,8 @@
 # Map Location Field
 
-* Version: 3.2.1
+* Version: 3.2.2
 * Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team
-* Build Date: 2011-05-31
+* Build Date: 2011-08-16
 * Requirements: Symphony 2.2
 
 ## Installation
