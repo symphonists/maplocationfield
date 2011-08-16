@@ -86,7 +86,7 @@
 
 			// coordinates is an array, split and return
 			if ($coordinates && is_object($coordinates)) {
-				return $coordinates->lng . ', ' . $coordinates->lat;
+				return $coordinates->lat . ', ' . $coordinates->lng;
 			}
 			// return comma delimeted string
 			elseif ($coordinates) {
