@@ -1,10 +1,5 @@
 # Map Location Field
 
-* Version: 3.2.2
-* Author: Nick Dunn, Nils Werner, Brendan Abbott, Symphony Team
-* Build Date: 2011-08-16
-* Requirements: Symphony 2.2
-
 ## Installation
 
 1. Upload the 'maplocationfield' folder in this archive to your Symphony 'extensions' folder

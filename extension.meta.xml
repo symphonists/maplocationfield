@@ -2,7 +2,7 @@
 <extension id="maplocationfield">
 	<name>Map Location Field v3</name>
 	<description>Plot locations on a Google Map. Supports address geocoding.</description>
-	<url type="repo">https://github.com/nickdunn/maplocationfield</url>
+	<repo type="github">https://github.com/nickdunn/maplocationfield</repo>
 	<url type="discuss">http://symphony-cms.com/discuss/thread/35943/</url>
 	<types>
 		<type>Field Types</type>
