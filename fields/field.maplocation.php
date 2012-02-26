@@ -1,6 +1,7 @@
 <?php
 
 	require_once(CORE . '/class.cacheable.php');
+	require_once(EXTENSIONS . '/maplocationfield/extension.driver.php');
 
 	Class fieldMapLocation extends Field{
 
