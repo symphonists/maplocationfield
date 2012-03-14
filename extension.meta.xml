@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="maplocationfield">
+<extension id="maplocationfield" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
 	<name>Map Location Field v3</name>
 	<description>Plot locations on a Google Map. Supports address geocoding.</description>
 	<repo type="github">https://github.com/nickdunn/maplocationfield</repo>
