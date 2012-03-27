@@ -1,35 +1,7 @@
 <?php
 
 	Class extension_maplocationfield extends Extension{
-		public function about() {
-			return array(
-				'name'			=> 'Field: Map Location',
-				'version'		=> '3.2.2',
-				'release-date'	=> '2011-08-16',
-				'author'		=> array(
-					array(
-						'name'		=> 'Nick Dunn',
-						'website'	=> 'http://nick-dunn.co.uk'
-					),
-					array(
-						'name'		=> 'Nils Werner',
-						'website'	=> 'http://www.phoque.com/projekte/symphony',
-						'email'		=> 'nils.werner@gmail.com'
-					),
-					array(
-						'name'		=> 'Brendan Abbott',
-						'website'	=> 'http://bloodbone.ws',
-						'email'		=> 'brendan@bloodbone.ws'
-					),
-					array(
-						'name'		=> 'Symphony Team',
-						'website'	=> 'http://www.symphony-cms.com',
-						'email'		=> 'team@symphony21.com'
-					)
-				)
-			);
-		}
-
+		
 		public function uninstall(){
 			Symphony::Database()->query("DROP TABLE `tbl_fields_maplocation`");
 		}

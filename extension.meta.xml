@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension id="maplocationfield" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
-	<name>Map Location Field v3</name>
+	<name>Map Location Field</name>
 	<description>Plot locations on a Google Map. Supports address geocoding.</description>
 	<repo type="github">https://github.com/nickdunn/maplocationfield</repo>
 	<url type="discuss">http://symphony-cms.com/discuss/thread/35943/</url>
@@ -14,13 +14,11 @@
 		</author>
 	</authors>
 	<media>
-		<item type="image" url="http://symphonyextensions.com/nickdunn/maplocationfield/media/maplocationfield.png">Map Location Field v3: Plot locations on a Google Map. Supports address geocoding.</item>
+		<item type="image" url="http://symphonyextensions.com/nickdunn/maplocationfield/media/maplocationfield.png">Map Location Field: Plot locations on a Google Map. Supports address geocoding.</item>
 	</media>
 	<releases>
 		<release version="3.2.3" date="2011-10-12" min="2.2">
-			<![CDATA[
-			Added `extension.meta.xml`.
-			]]>
+			* Added `extension.meta.xml`.
 		</release>
 		<release version="3.2.2" date="2011-08-16" min="2.2" />
 	</releases>

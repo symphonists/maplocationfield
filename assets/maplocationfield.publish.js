@@ -44,10 +44,10 @@ MapLocationField.prototype.init = function() {
 			'<li class="map">Map</li>' +
 			'<li class="edit">Edit Location</li>' +
 		'</ul>' +
-		'<div class="tab-panel tab-map">' +
+		'<div class="tab-panel tab-map inline frame">' +
 			'<div class="gmap"></div>' +
 		'</div>' +
-		'<div class="tab-panel tab-edit">' +
+		'<div class="tab-panel tab-edit inline frame">' +
 			'<fieldset class="coordinates">' +
 				'<label>Latitude/Longitude</label>' +
 				'<input type="text" name="latitude" class="text"/><input type="text" name="longitude" class="text"/>' +

@@ -14,8 +14,8 @@
 
 		private $_filter_origin = array();
 
-		public function __construct(&$parent){
-			parent::__construct($parent);
+		public function __construct(){
+			parent::__construct();
 			$this->_name = 'Map Location';
 		}
 
@@ -60,7 +60,7 @@
 			$coordinates = null;
 
 			$cache_id = md5('maplocationfield_' . $address);
-			$cache = new Cacheable($this->_engine->Database);
+			$cache = new Cacheable(Symphony::Database());
 			$cachedData = $cache->check($cache_id);
 
 			// no data has been cached
@@ -150,16 +150,16 @@
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
 				Administration::instance()->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.js', 80);
 			}
-
+			
 			// input values
 			$coordinates = array($data['latitude'], $data['longitude']);
-			$centre = $data['centre'];
-			$zoom = $data['zoom'];
+			$centre = (string)$data['centre'];
+			$zoom = (string)$data['zoom'];
 
 			// get defaults for new entries
-			if (reset($coordinates) == null) $coordinates = explode(',', $this->get('default_location_coords'));
-			if ($centre == null) $centre = $this->get('default_location_coords');
-			if ($zoom == null) $zoom = $this->get('default_zoom');
+			if (reset($coordinates) === null) $coordinates = explode(',', $this->get('default_location_coords'));
+			if (empty($centre)) $centre = $this->get('default_location_coords');
+			if (empty($zoom)) $zoom = $this->get('default_zoom');
 
 			$label = Widget::Label('Marker Latitude/Longitude');
 			$label->setAttribute('class', 'coordinates');
@@ -182,8 +182,7 @@
 
 			if (is_array($data)) {
 				$coordinates = split(',', $data['coordinates']);
-
-				$data = array(
+				return array(
 					'latitude' => trim($coordinates[0]),
 					'longitude' => trim($coordinates[1]),
 					'centre' => $data['centre'],
@@ -191,22 +190,19 @@
 				);
 			}
 			else {
-				// Check that the $centre is actually a coordinate
+				// if data is an address, geocode it to lat/lon first
 				if (!preg_match('/^(-?[.0-9]+),\s?(-?[.0-9]+)$/', $data)) {
 					$data = self::__geocodeAddress($data);
 				}
 
 				$coordinates = split(',', $data);
-
-				$data = array(
+				return array(
 					'latitude' => trim($coordinates[0]),
 					'longitude' => trim($coordinates[1]),
 					'centre' => $data,
 					'zoom' => $this->get('default_zoom')
 				);
 			}
-
-			return $data;
 		}
 
 	/*-------------------------------------------------------------------------
@@ -254,7 +250,7 @@
 		Filtering:
 	-------------------------------------------------------------------------*/
 
-		public function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation=false){
+		public function buildDSRetrievalSQL($data, &$joins, &$where, $andOperation=false){
 			// Symphony by default splits filters by commas. We want commas, so
 			// concatenate filters back together again putting commas back in
 			$data = join(',', $data);
@@ -293,7 +289,7 @@
 				}
 
 				// if we don't have a decent set of coordinates, we can't query
-				if (is_null($lat) || is_null($lng)) return true;
+				if (is_null($lat) || is_null($lng)) return;
 
 				$this->_filter_origin['latitude'] = $lat;
 				$this->_filter_origin['longitude'] = $lng;
