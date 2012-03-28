@@ -6,6 +6,7 @@ div.field-maplocation div.tab-panel {
 	overflow: auto;
 	clear: both;
 	display: none;
+	min-height: 322px;
 	-webkit-border-top-left-radius: 0;
 	-moz-border-radius-topleft: 0;
 }
