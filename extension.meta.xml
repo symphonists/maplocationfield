@@ -2,12 +2,15 @@
 <extension id="maplocationfield" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
 	<name>Map Location Field</name>
 	<description>Plot locations on a Google Map. Supports address geocoding.</description>
-	<repo type="github">https://github.com/nickdunn/maplocationfield</repo>
+	<repo type="github">https://github.com/symphonists/maplocationfield</repo>
 	<url type="discuss">http://symphony-cms.com/discuss/thread/35943/</url>
 	<types>
 		<type>Field Types</type>
 	</types>
 	<authors>
+		<author>
+			<name github="symphonists" symphony="community">Symphony Community</name>
+		</author>
 		<author>
 			<name github="nickdunn" symphony="nickdunn">Nick Dunn</name>
 			<website>http://nick-dunn.co.uk</website>
