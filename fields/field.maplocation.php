@@ -70,7 +70,7 @@
 
 				$ch = new Gateway;
 				$ch->init();
-				$ch->setopt('URL', 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false');
+				$ch->setopt('URL', 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false&v=3.13');
 				$response = json_decode($ch->exec());
 
 				$coordinates = $response->results[0]->geometry->location;
@@ -150,7 +150,7 @@
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
 				Administration::instance()->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.js', 80);
 			}
-			
+
 			// input values
 			$coordinates = array($data['latitude'], $data['longitude']);
 			$centre = (string)$data['centre'];
@@ -238,12 +238,16 @@
 			$zoom = (int)$data['zoom'] - 2;
 			if ($zoom < 1) $zoom = 1;
 
-			return sprintf(
+			$thumbnail = sprintf(
 				"<img src='http://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=160x90&sensor=false&markers=color:red|size:small|%s' alt=''/>",
 				$data['centre'],
 				$zoom,
 				implode(',', array($data['latitude'], $data['longitude']))
-			);
+            );
+            if (null !== $link) {
+                return sprintf('<a href="%s">%s</a>', $link->getAttribute('href'), $thumbnail);
+            }
+            return $thumbnail;
 		}
 
 	/*-------------------------------------------------------------------------
