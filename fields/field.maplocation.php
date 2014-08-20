@@ -48,8 +48,8 @@
 				  KEY `entry_id` (`entry_id`),
 				  KEY `latitude` (`latitude`),
 				  KEY `longitude` (`longitude`)
-				) TYPE=MyISAM;"
-			);
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			");
 		}
 
 	/*-------------------------------------------------------------------------
@@ -65,18 +65,23 @@
 
 			// no data has been cached
 			if(!$cachedData) {
-
 				include_once(TOOLKIT . '/class.gateway.php');
 
 				$ch = new Gateway;
 				$ch->init();
-				$ch->setopt('URL', 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false&v=3.13');
+				$ch->setopt('URL', 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address));
 				$response = json_decode($ch->exec());
 
-				$coordinates = $response->results[0]->geometry->location;
+				if($response->status === 'OK') {
+					$coordinates = $response->results[0]->geometry->location;
+				}
+				else {
+					return false;
+				}
 
 				if ($coordinates && is_object($coordinates)) {
-					$cache->write($cache_id, $coordinates->lat . ', ' . $coordinates->lng, $this->_geocode_cache_expire); // cache lifetime in minutes
+					// cache lifetime in minutes
+					$cache->write($cache_id, $coordinates->lat . ', ' . $coordinates->lng, $this->_geocode_cache_expire);
 				}
 
 			}
@@ -94,7 +99,7 @@
 				return $coordinates;
 			}
 			// return default coordinates
-			elseif ($return_default) {
+			elseif ($can_return_default) {
 				return $this->_default_coordinates;
 			}
 		}
@@ -135,9 +140,7 @@
 
 			if(!$fields['default_zoom']) $fields['default_zoom'] = $this->_default_zoom;
 
-			Symphony::Database()->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
-
-			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
+			return FieldManager::saveSettings($id, $fields);
 		}
 
 	/*-------------------------------------------------------------------------
@@ -177,11 +180,11 @@
 			$wrapper->appendChild($label);
 		}
 
-		public function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
+		public function processRawFieldData($data, &$status, &$message=null, $simulate=false, $entry_id = null){
 			$status = self::__OK__;
 
 			if (is_array($data)) {
-				$coordinates = split(',', $data['coordinates']);
+				$coordinates = explode(',', $data['coordinates']);
 				return array(
 					'latitude' => trim($coordinates[0]),
 					'longitude' => trim($coordinates[1]),
@@ -195,7 +198,7 @@
 					$data = self::__geocodeAddress($data);
 				}
 
-				$coordinates = split(',', $data);
+				$coordinates = explode(',', $data);
 				return array(
 					'latitude' => trim($coordinates[0]),
 					'longitude' => trim($coordinates[1]),
@@ -209,7 +212,7 @@
 		Output:
 	-------------------------------------------------------------------------*/
 
-		public function appendFormattedElement(&$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
+		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null){
 			$field = new XMLElement($this->get('element_name'), null, array(
 				'latitude' => $data['latitude'],
 				'longitude' => $data['longitude'],
@@ -232,6 +235,12 @@
 			$wrapper->appendChild($field);
 		}
 
+		public function prepareReadableValue($data, $entry_id = null, $truncate = false, $defaultValue = null) {
+			if(isset($data['latitude'])) {
+				return $data['latitude'] . ',' . $data['longitude'];
+			}
+		}
+
 		public function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
 			if (empty($data)) return;
 
@@ -243,11 +252,11 @@
 				$data['centre'],
 				$zoom,
 				implode(',', array($data['latitude'], $data['longitude']))
-            );
-            if (null !== $link) {
-                return sprintf('<a href="%s">%s</a>', $link->getAttribute('href'), $thumbnail);
-            }
-            return $thumbnail;
+			);
+			if (null !== $link) {
+				return sprintf('<a href="%s">%s</a>', $link->getAttribute('href'), $thumbnail);
+			}
+			return $thumbnail;
 		}
 
 	/*-------------------------------------------------------------------------
@@ -257,7 +266,7 @@
 		public function buildDSRetrievalSQL($data, &$joins, &$where, $andOperation=false){
 			// Symphony by default splits filters by commas. We want commas, so
 			// concatenate filters back together again putting commas back in
-			$data = join(',', $data);
+			$data = implode(',', $data);
 
 			/*
 			within 20 km of 10.545, -103.1

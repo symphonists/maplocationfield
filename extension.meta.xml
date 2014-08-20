@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="maplocationfield" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+<extension id="maplocationfield" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Map Location Field</name>
 	<description>Plot locations on a Google Map. Supports address geocoding.</description>
 	<repo type="github">https://github.com/symphonists/maplocationfield</repo>
-	<url type="discuss">http://symphony-cms.com/discuss/thread/35943/</url>
+	<url type="discuss">http://getsymphony.com/discuss/thread/35943/</url>
 	<types>
 		<type>Field Types</type>
 	</types>

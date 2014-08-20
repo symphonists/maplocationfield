@@ -2,7 +2,7 @@
 
 ## Installation
 
-1. Upload the 'maplocationfield' folder in this archive to your Symphony 'extensions' folder
+1. Upload the `/maplocationfield` folder in this archive to your Symphony `/extensions` folder
 2. Enable it by selecting the "Field: Map Location", choose Enable from the with-selected menu, then click Apply
 3. The field will be available in the list when creating a Section
 

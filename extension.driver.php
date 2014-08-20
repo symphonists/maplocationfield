@@ -1,21 +1,23 @@
 <?php
 
 	Class extension_maplocationfield extends Extension{
-		
+
 		public function uninstall(){
 			Symphony::Database()->query("DROP TABLE `tbl_fields_maplocation`");
 		}
 
 		public function install() {
-			return Symphony::Database()->query("CREATE TABLE `tbl_fields_maplocation` (
-			  `id` int(11) unsigned NOT NULL auto_increment,
-			  `field_id` int(11) unsigned NOT NULL,
-			  `default_location` varchar(60) NOT NULL,
-			  `default_location_coords` varchar(60) NOT NULL,
-			  `default_zoom` int(11) unsigned NOT NULL,
-			  PRIMARY KEY (`id`),
-			  UNIQUE KEY `field_id` (`field_id`)
-			) TYPE=MyISAM");
+			return Symphony::Database()->query("
+				CREATE TABLE `tbl_fields_maplocation` (
+					`id` int(11) unsigned NOT NULL auto_increment,
+					`field_id` int(11) unsigned NOT NULL,
+					`default_location` varchar(60) NOT NULL,
+					`default_location_coords` varchar(60) NOT NULL,
+					`default_zoom` int(11) unsigned NOT NULL,
+					PRIMARY KEY (`id`),
+					UNIQUE KEY `field_id` (`field_id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			");
 		}
 
 	/*-------------------------------------------------------------------------
