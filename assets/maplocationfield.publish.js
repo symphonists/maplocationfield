@@ -44,36 +44,25 @@ MapLocationField.prototype.init = function() {
 	
 	// build field HTML
 	var html = jQuery(
-		'<ul class="tabs">' +
-			'<li class="map">Map</li>' +
-			'<li class="edit">Edit Location</li>' +
-		'</ul>' +
-		'<div class="tab-panel tab-map inline frame">' +
-			'<div class="gmap"></div>' +
-		'</div>' +
-		'<div class="tab-panel tab-edit inline frame">' +
-			'<fieldset class="coordinates">' +
-				'<label>Latitude/Longitude</label>' +
-				'<input type="text" name="latitude" class="text"/><input type="text" name="longitude" class="text"/>' +
-				'<input type="button" value="Update Map" class="button"/>' +
-			'</fieldset>' +
-			'<fieldset class="geocode">' +
-				'<label>Address</label>' +
-				'<input type="text" name="address" class="text"/>' +
-				'<input type="button" value="Update Map" class="button"/>' +
-			'</fieldset>' +
-		'</div>'
+    '<div class="frame">' +
+      '<div class="tab-panel tab-map inline">' +
+        '<div class="gmap"></div>' +
+      '</div>' +
+      '<div class="tab-panel tab-edit inline">' +
+        '<fieldset class="coordinates">' +
+          '<label>Breitengrad/Längengrad</label>' +
+          '<input type="text" name="latitude" class="text"/><input type="text" name="longitude" class="text"/>' +
+          '<input type="button" value="Karte aktualisieren" class="button"/>' +
+        '</fieldset>' +
+        '<fieldset class="geocode">' +
+          '<label>Adresse</label>' +
+          '<input type="text" name="address" class="text"/>' +
+          '<input type="button" value="Karte aktualisieren" class="button"/>' +
+        '</fieldset>' +
+      '</div>' +
+    '</div>'
 	).prependTo(this.field);
-	
-	// bind tab events
-	this.field.find('ul.tabs li').bind('click', function(e) {
-		e.preventDefault();
-		self.setActiveTab(jQuery(this).attr('class').split(' ')[0]);
-	});
-	
-	// open the Map tab by default
-	this.setActiveTab('map');
-	
+		
 	// get initial map values from the DOM
 	var initial_coordinates = this.parseLatLng(this.inputs.marker.val());
 	var initial_centre = this.parseLatLng(this.inputs.centre.val());
@@ -83,13 +72,33 @@ MapLocationField.prototype.init = function() {
 	var centre_latlng = new google.maps.LatLng(initial_centre[0], initial_centre[1]);
 	
 	// add the map
+	var mapTypeIds = [];
+    mapTypeIds.push("OSM");
+    for(var type in google.maps.MapTypeId) {
+        mapTypeIds.push(google.maps.MapTypeId[type]);
+    }
+    
+	
 	this.map = new google.maps.Map(this.field.find('div.gmap')[0], {
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		mapTypeControl: false,
-		zoom: initial_zoom,
+    zoom: initial_zoom,
 		center: centre_latlng,
-		scrollwheel: false
+		scrollwheel: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControlOptions: {
+        mapTypeIds: mapTypeIds
+    }
 	});
+	
+	//Define OSM map type pointing at the OpenStreetMap tile server  
+  this.map.mapTypes.set("OSM", new google.maps.ImageMapType({
+      getTileUrl: function(coord, zoom) {
+          return "http://a.tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+      },
+      tileSize: new google.maps.Size(256, 256),
+      name: "OSM",
+      maxZoom: 18,
+      minZoom: 14
+  }));
 	
 	// add the marker
 	this.marker = new google.maps.Marker({
@@ -102,6 +111,7 @@ MapLocationField.prototype.init = function() {
 	self.storeCoordinates(self.marker.getPosition());
 	self.storeCentre();
 	self.storeZoom();
+	
 	
 	// bind events to store new values
 	google.maps.event.addListener(this.marker, 'drag', function() {
@@ -177,31 +187,12 @@ MapLocationField.prototype.parseLatLng = function(string) {
 	return string.match(/-?\d+\.\d+/g);
 }
 
-MapLocationField.prototype.setActiveTab = function(tab_name) {
-	var self = this;
-	
-	// hide all tab panels
-	this.field.find('div.tab-panel').hide();
-	
-	// find the desired tab and activate the tab and its panel
-	this.field.find('ul.tabs li').each(function() {
-		var tab = jQuery(this);
-		if (tab.hasClass(tab_name)) {
-			tab.addClass('active');
-			self.field.find('div.tab-' + tab_name).show();
-		} else {
-			tab.removeClass('active');
-		}
-	});
-}
-
 MapLocationField.prototype.editLatLng = function() {
 	var fieldset = this.field.find('fieldset.coordinates');
 	var lat = fieldset.find('input[name=latitude]').val();
 	var lng = fieldset.find('input[name=longitude]').val();
 	
 	var position = new google.maps.LatLng(lat, lng);
-	this.setActiveTab('map');
 	this.moveMarker(position, true);
 }
 
@@ -221,7 +212,6 @@ MapLocationField.prototype.editAddress = function() {
 	self.geocodeAddress(
 		address_field.val(),
 		function(result) {
-			self.setActiveTab('map');
 			if (result.geometry.bounds) self.map.fitBounds(result.geometry.bounds);
 			self.moveMarker(result.geometry.location, true);
 			address_field.val('');

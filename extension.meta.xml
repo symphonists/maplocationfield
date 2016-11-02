@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension id="maplocationfield" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Map Location Field</name>
-	<description>Plot locations on a Google Map. Supports address geocoding.</description>
+	<description>Plot locations on a Google Map. Supports address geocoding. This fork adds a Weimar Map from 1926.</description>
 	<repo type="github">https://github.com/symphonists/maplocationfield</repo>
 	<url type="discuss">http://getsymphony.com/discuss/thread/35943/</url>
 	<types>
@@ -15,11 +15,22 @@
 			<name github="nickdunn" symphony="nickdunn">Nick Dunn</name>
 			<website>http://nick-dunn.co.uk</website>
 		</author>
+		<author>
+			<name github="animaux" symphony="animaux">Alexander Rutz</name>
+			<website>http://animaux.de</website>
+		</author>
 	</authors>
 	<media>
 		<item type="image" url="http://symphonyextensions.com/nickdunn/maplocationfield/media/maplocationfield.png">Map Location Field: Plot locations on a Google Map. Supports address geocoding.</item>
 	</media>
 	<releases>
+    <release version="3.3.2" date="2016-11-02" min="2.3.x">
+			- Remove Tabs
+			- Remove sensor option
+			- Possibility to add API-Key
+			- OSM and other custom maps included
+		</release>
+    <release version="3.3.1" date="2012-03-27" min="2.3.x" />
 		<release version="3.3.0" date="2012-03-27" min="2.3.x" />
 		<release version="3.2.3" date="2011-10-12" min="2.2" max="2.2.x" />
 		<release version="3.2.2" date="2011-08-16" min="2.2" />

@@ -1,5 +1,12 @@
 # Map Location Field
 
+Ugly hack from Nick Dunn’s original version.
+
++ Remove Tabs
++ Remove sensor option
++ Possibility to add API-Key in `field.maplocation.php`
++ OSM and other custom maps included
+
 ## Installation
 
 1. Upload the `/maplocationfield` folder in this archive to your Symphony `/extensions` folder
