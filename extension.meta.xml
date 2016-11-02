@@ -24,6 +24,9 @@
 		<item type="image" url="http://symphonyextensions.com/nickdunn/maplocationfield/media/maplocationfield.png">Map Location Field: Plot locations on a Google Map. Supports address geocoding.</item>
 	</media>
 	<releases>
+    <release version="3.3.3" date="2016-11-02" min="2.3.x">
+			- switch to https to fix broken default geocoding
+		</release>
     <release version="3.3.2" date="2016-11-02" min="2.3.x">
 			- Remove Tabs
 			- Remove sensor option
