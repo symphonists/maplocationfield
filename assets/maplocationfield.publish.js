@@ -103,8 +103,8 @@ MapLocationField.prototype.init = function() {
       },
       tileSize: new google.maps.Size(256, 256),
       name: "OSM",
-      maxZoom: 18,
-      minZoom: 14
+      maxZoom: 19,
+      minZoom: 6
   }));
 	
 	// add the marker
