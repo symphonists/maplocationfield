@@ -1,10 +1,10 @@
 # Map Location Field
 
-Ugly hack from Nick Dunn’s original version.
+--Ugly-- Slightly dirty hack from Nick Dunn’s original version.
 
 + Remove Tabs
 + Remove sensor option
-+ Possibility to add API-Key in `field.maplocation.php`
++ Possibility to add API-Key in field settings
 + OSM and other custom maps included
 
 ## Installation
@@ -12,7 +12,7 @@ Ugly hack from Nick Dunn’s original version.
 1. Upload the `/maplocationfield` folder in this archive to your Symphony `/extensions` folder
 2. Enable it by selecting the "Field: Map Location", choose Enable from the with-selected menu, then click Apply
 3. The field will be available in the list when creating a Section
-
+4. You will need a [Google Maps API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) in order to use geolocations services. If you have that, paste it in the appropriate field in the field settings.
 
 ## Configuration
 

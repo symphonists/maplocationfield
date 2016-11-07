@@ -5,15 +5,14 @@
 
 	Class fieldMapLocation extends Field{
 	
-	  // your API key here
-    private $_api_key = '';
-
 		private $_geocode_cache_expire = 60; // minutes
 
 		// defaults used when user doesn't enter defaults when adding field to section
 		private $_default_location = 'London, England';
 		private $_default_coordinates = '51.58129468879224, -0.554702996875005'; // London, England
 		private $_default_zoom = 3;
+
+    //private $zoom = $this->get('default_zoom');
 
 		private $_filter_origin = array();
 
@@ -38,7 +37,7 @@
 		Setup:
 	-------------------------------------------------------------------------*/
 
-		public function createTable(){
+    public function createTable(){
 			return Symphony::Database()->query(
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 				  `id` int(11) unsigned NOT NULL auto_increment,
@@ -72,7 +71,7 @@
 
 				$ch = new Gateway;
 				$ch->init();
-				$ch->setopt('URL', 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&key='.$this->_api_key);
+				$ch->setopt('URL', 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&key='.$this->get('api_key'));
 				$response = json_decode($ch->exec());
 
 				if($response->status === 'OK') {
@@ -121,6 +120,10 @@
 			$label = Widget::Label('Default Zoom Level');
 			$label->appendChild(Widget::Input('fields['.$this->get('sortorder').'][default_zoom]', $this->get('default_zoom')));
 			$wrapper->appendChild($label);
+			
+			$label = Widget::Label('Google Maps API Key');
+			$label->appendChild(Widget::Input('fields['.$this->get('sortorder').'][api_key]', $this->get('api_key')));
+			$wrapper->appendChild($label);
 
 			$this->appendShowColumnCheckbox($wrapper);
 		}
@@ -137,11 +140,14 @@
 			$fields['field_id'] = $id;
 			$fields['default_location'] = $this->get('default_location');
 			$fields['default_zoom'] = $this->get('default_zoom');
+			$fields['api_key'] = $this->get('api_key');
 
 			if(!$fields['default_location']) $fields['default_location'] = $this->_default_location;
 			$fields['default_location_coords'] = self::__geocodeAddress($fields['default_location']);
 
 			if(!$fields['default_zoom']) $fields['default_zoom'] = $this->_default_zoom;
+			
+			if(!$fields['api_key']) $fields['api_key'] = $this->get('api_key');
 
 			return FieldManager::saveSettings($id, $fields);
 		}
@@ -152,7 +158,7 @@
 
 		public function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL, $entry_id=NULL){
 			if (class_exists('Administration') && Administration::instance()->Page) {
-				Administration::instance()->Page->addScriptToHead('https://maps.google.com/maps/api/js?key=' . $this->_api_key, 79);
+				Administration::instance()->Page->addScriptToHead('https://maps.google.com/maps/api/js?key=' . $this->get('api_key'), 79);
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
 				Administration::instance()->Page->addScriptToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.js', 80);
 			}
@@ -221,19 +227,19 @@
 				'longitude' => $data['longitude'],
 			));
 
-// 			$map = new XMLElement('map', null, array(
-// 				'zoom' => $data['zoom'],
-// 				'centre' => $data['centre']
-// 			));
-// 			$field->appendChild($map);
+			$map = new XMLElement('map', null, array(
+				'zoom' => $data['zoom'],
+				'centre' => $data['centre']
+			));
+			$field->appendChild($map);
 
-// 			if (count($this->_filter_origin['latitude']) > 0) {
-// 				$distance = new XMLElement('distance');
-// 				$distance->setAttribute('from', $this->_filter_origin['latitude'] . ',' . $this->_filter_origin['longitude']);
-// 				$distance->setAttribute('distance', extension_maplocationfield::geoDistance($this->_filter_origin['latitude'], $this->_filter_origin['longitude'], $data['latitude'], $data['longitude'], $this->_filter_origin['unit']));
-// 				$distance->setAttribute('unit', ($this->_filter_origin['unit'] == 'k') ? 'km' : 'miles');
-// 				$field->appendChild($distance);
-// 			}
+			if (count($this->_filter_origin['latitude']) > 0) {
+				$distance = new XMLElement('distance');
+				$distance->setAttribute('from', $this->_filter_origin['latitude'] . ',' . $this->_filter_origin['longitude']);
+				$distance->setAttribute('distance', extension_maplocationfield::geoDistance($this->_filter_origin['latitude'], $this->_filter_origin['longitude'], $data['latitude'], $data['longitude'], $this->_filter_origin['unit']));
+				$distance->setAttribute('unit', ($this->_filter_origin['unit'] == 'k') ? 'km' : 'miles');
+				$field->appendChild($distance);
+			}
 
 			$wrapper->appendChild($field);
 		}
@@ -250,8 +256,8 @@
 			$zoom = (int)$data['zoom'] - 2;
 			if ($zoom < 1) $zoom = 1;
 
-			return sprintf(
-				"<img src='https://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=160x90&key=".$this->_api_key."&markers=color:red|size:small|%s' alt=''/>",
+			$thumbnail = sprintf(
+				"<img src='https://maps.google.com/maps/api/staticmap?center=%s&zoom=%d&size=160x90&key=".$this->get('api_key')."&markers=color:red|size:small|%s' alt=''/>",
 				$data['centre'],
 				$zoom,
 				implode(',', array($data['latitude'], $data['longitude']))
