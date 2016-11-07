@@ -24,6 +24,9 @@
 		<item type="image" url="http://symphonyextensions.com/nickdunn/maplocationfield/media/maplocationfield.png">Map Location Field: Plot locations on a Google Map. Supports address geocoding.</item>
 	</media>
 	<releases>
+		<release version="3.4.1" date="2016-11-07" min="2.3.x" max="2.x.x">
+			- localisation for german/french/norwegian
+		</release>
 		<release version="3.4.0" date="2016-11-07" min="2.3.x" max="2.x.x">
 			- make API key configurable in field settings
 			- https everywhere

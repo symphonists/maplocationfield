@@ -8,6 +8,13 @@ jQuery(document).ready(function() {
 	});
 });
 
+	Symphony.Language.add({
+		'Latitude/Longitude': false,
+		'Address': false,
+		'Update Map': false
+	});
+	
+
 function MapLocationField(field) {
 	
 	// cache the field container DOM element (jQuery)
@@ -50,14 +57,14 @@ MapLocationField.prototype.init = function() {
       '</div>' +
       '<div class="tab-panel tab-edit inline">' +
         '<fieldset class="coordinates">' +
-          '<label>Breitengrad/Längengrad</label>' +
+          '<label>' + Symphony.Language.get('Latitude/Longitude') + '</label>' +
           '<input type="text" name="latitude" class="text"/><input type="text" name="longitude" class="text"/>' +
-          '<input type="button" value="Karte aktualisieren" class="button"/>' +
+          '<input type="button" value="' + Symphony.Language.get('Update Map') + '" class="button"/>' +
         '</fieldset>' +
         '<fieldset class="geocode">' +
-          '<label>Adresse</label>' +
+          '<label>' + Symphony.Language.get('Address') + '</label>' +
           '<input type="text" name="address" class="text"/>' +
-          '<input type="button" value="Karte aktualisieren" class="button"/>' +
+          '<input type="button" value="' + Symphony.Language.get('Update Map') + '" class="button"/>' +
         '</fieldset>' +
       '</div>' +
     '</div>'
@@ -71,7 +78,7 @@ MapLocationField.prototype.init = function() {
 	var marker_latlng = new google.maps.LatLng(initial_coordinates[0], initial_coordinates[1]);
 	var centre_latlng = new google.maps.LatLng(initial_centre[0], initial_centre[1]);
 	
-	// add the map
+	// add the map(s)
 	var mapTypeIds = [];
     mapTypeIds.push("OSM");
     for(var type in google.maps.MapTypeId) {
