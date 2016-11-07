@@ -1,11 +1,11 @@
 # Map Location Field
 
---Ugly-- Slightly dirty hack from Nick Dunn’s original version.
+~~Ugly~~ Slightly dirty hack from Nick Dunn’s original version.
 
 + Remove Tabs
 + Remove sensor option
 + Possibility to add API-Key in field settings
-+ OSM and other custom maps included
++ OSM Map included as Layer
 
 ## Installation
 
@@ -27,7 +27,7 @@ The field works in both Main Content and Sidebar columns, collapsing to a smalle
 
 When creating a new entry, drag the red marker on the map to change location. To tweak the latitude/longitude click "Edit Location". This panel also allows you to enter an address to be geocoded and placed on the map.
 
-![Example field](http://nick-dunn.co.uk/assets/files/symphony-maplocationfield.png)
+![Example field](https://cloud.githubusercontent.com/assets/446874/20055986/31cd4f4a-a4e4-11e6-934c-4a774c85d418.png)
 
 ## Data Source Filtering
 
