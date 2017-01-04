@@ -16,6 +16,7 @@
 						`default_location` varchar(60) NOT NULL,
 						`default_location_coords` varchar(60) NOT NULL,
 						`default_zoom` int(11) unsigned NOT NULL,
+						`api_key` text default NULL,
 						PRIMARY KEY (`id`),
 						UNIQUE KEY `field_id` (`field_id`)
 					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

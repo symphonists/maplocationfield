@@ -24,6 +24,9 @@
 		<item type="image" url="https://cloud.githubusercontent.com/assets/446874/20055986/31cd4f4a-a4e4-11e6-934c-4a774c85d418.png">Map Location Field: Plot locations on a Google Map. Supports address geocoding.</item>
 	</media>
 	<releases>
+		<release version="3.4.2" date="2017-01-04" min="2.3.x" max="2.x.x">
+			- fix for missing column on fresh install
+		</release>
 		<release version="3.4.1" date="2016-11-07" min="2.3.x" max="2.x.x">
 			- localisation for german/french/norwegian
 		</release>
