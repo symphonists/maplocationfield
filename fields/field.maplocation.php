@@ -333,4 +333,29 @@
 			return true;
 		}
 
+	/*-------------------------------------------------------------------------
+		Events:
+	-------------------------------------------------------------------------*/
+
+		public function getExampleFormMarkup(){
+			$fieldset = new XMLElement('fieldset');
+
+			$label = Widget::Label($this->get('label') . ' ' . __('Coordinates'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][coordinates]', null, 'text'));
+
+			$fieldset->appendChild($label);
+
+			$label = Widget::Label($this->get('label') . ' ' . __('Map centre'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][centre]', null, 'text'));
+
+			$fieldset->appendChild($label);
+			
+			$label = Widget::Label($this->get('label') . ' ' . __('Map Zoom'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][zoom]', null, 'text'));
+
+			$fieldset->appendChild($label);
+
+			return $fieldset;
+		}
+
 	}
