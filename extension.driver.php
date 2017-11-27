@@ -72,7 +72,7 @@
 			(float)$latMAX = $lat + $usrRLAT;
 
 			// Longitude calculation
-			(float)$mpdLON = 69.1703234283616 * cos($lat * (pi/180));
+			(float)$mpdLON = 69.1703234283616 * cos($lat * (M_PI/180));
 			(float)$dpmLON = 1 / $mpdLON; // degrees per mile longintude
 			$usrRLON = $dpmLON * $radius;
 
