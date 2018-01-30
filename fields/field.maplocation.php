@@ -110,7 +110,7 @@
 		Settings:
 	-------------------------------------------------------------------------*/
 
-		public function displaySettingsPanel(&$wrapper, $errors=NULL){
+		public function displaySettingsPanel(XMLElement &$wrapper, $errors = null){
 			parent::displaySettingsPanel($wrapper, $errors);
 
 			$label = Widget::Label('Default Marker Location');
@@ -156,7 +156,7 @@
 		Publish:
 	-------------------------------------------------------------------------*/
 
-		public function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL, $entry_id=NULL){
+		public function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null){
 			if (class_exists('Administration') && Administration::instance()->Page) {
 				Administration::instance()->Page->addScriptToHead('https://maps.google.com/maps/api/js?key=' . $this->get('api_key'), 79);
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/maplocationfield/assets/maplocationfield.publish.css', 'screen', 78);
